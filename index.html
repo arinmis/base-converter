@@ -13,38 +13,31 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" style="width: 150px;">enter number</span>
               </div>
-              <input type="text" class="form-control" style="width: 150px;" placeholder="1100" aria-label="Username" aria-describedby="basic-addon1">
+              <input v-model="number" type="text" class="form-control" style="width: 150px;" placeholder="1100" aria-label="Username" aria-describedby="basic-addon1">
             </div>
 
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <label class="input-group-text"  style="width: 150px;" for="inputGroupSelect01">From</label>
               </div>
-              <select class="custom-select" style="width: 150px;">
-                <option selected>Hexadecimal</option>
-                <option value="1">Decimal</option>
-                <option value="2">Octal</option>
-                <option value="3">Binary</option>
+              <select v-model="baseTo" class="custom-select" style="width: 150px;">
+                  <option v-for="option in baseOptions" v-bind:value="option.value">{{ option.text }}</option>
               </select>
             </div>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <label class="input-group-text"  style="width: 150px;" for="inputGroupSelect01">To</label>
               </div>
-              <select class="custom-select" style="width: 150px;">
-                <option selected>Hexadecimal</option>
-                <option value="1">Decimal</option>
-                <option value="2">Octal</option>
-                <option value="3">Binary</option>
+              <select v-model="baseFrom" class="custom-select" style="width: 150px;">
+                  <option v-for="option in targetBaseOptions" v-bind:value="option.value">{{ option.text }}</option>
               </select>
             </div>
             <div id="output">
-                <button type="button" style="width: 150px;" class="btn btn-success">convert</button>
-                <span class="ms-2 style=" width: 150px; id="result">C</span>
+                <button v-on:click="hello" type="button" style="width: 150px;" class="btn btn-success">convert</button>
+                <span class="ms-2 text-center" id="result">C</span>
             </div>
-
-
         </div>
-    
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+        <script src="app.js"></script>
     </body>
 </html>
