@@ -20,7 +20,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text"  style="width: 150px;" for="inputGroupSelect01">From</label>
               </div>
-              <select v-model="baseTo" class="custom-select" style="width: 150px;">
+              <select v-model="baseFrom" class="custom-select" style="width: 150px;">
                   <option v-for="option in baseOptions" v-bind:value="option.value">{{ option.text }}</option>
               </select>
             </div>
@@ -28,13 +28,15 @@
               <div class="input-group-prepend">
                 <label class="input-group-text"  style="width: 150px;" for="inputGroupSelect01">To</label>
               </div>
-              <select v-model="baseFrom" class="custom-select" style="width: 150px;">
+              <select v-model="baseTo" class="custom-select" style="width: 150px;">
                   <option v-for="option in targetBaseOptions" v-bind:value="option.value">{{ option.text }}</option>
               </select>
             </div>
             <div id="output">
                 <button v-on:click="hello" type="button" style="width: 150px;" class="btn btn-success">convert</button>
-                <span class="ms-2 text-center" id="result">C</span>
+                <span class="ms-2 text-center" id="result">
+                    ({{ number}}) <sub>{{ baseFrom}}</sub> = ({{ result }}) <sub>{{ baseTo }}</sub>  
+                </span>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
