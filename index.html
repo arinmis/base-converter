@@ -10,7 +10,7 @@
     <body class="vh-100 bg-white bg-gradient d-flex justify-content-center align-items-center">
         <div id="converter" class='shadow p-4 rounded'>
             <!-- output -->
-            <div class="mb-2 pb-2 overflow-auto h5 text-center border-bottom border-info border-2" style="width: 300px;" id="output">
+            <div v-if='isPressed' class="mb-2 pb-2 overflow-auto h5 text-center border-bottom border-info border-2" style="width: 300px;" id="output">
                <span>
                    ({{ number}}) <sub>{{ baseFrom}}</sub> 
                </span>&nbsp;=&nbsp;<span>

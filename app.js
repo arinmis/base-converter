@@ -19,6 +19,7 @@ var app = new Vue({
         baseFrom: 0,
         baseTo: 0, 
         result: null,
+        isPressed: false,
     },
     methods: {
         // main program
@@ -71,6 +72,7 @@ var app = new Vue({
         // helper methods
         display: function(output) {
             this.result = output;
+            this.isPressed = true; // render div
         },
         binaryMap: function(binary) {
             if (binary == '0000')
