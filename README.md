@@ -1,5 +1,5 @@
 ### To do:
 - check whether input digits are valid.
 
-### Demo
+### Live demo
 [base-converter](https://arinmis.github.io/base-converter/)
