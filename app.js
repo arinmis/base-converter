@@ -15,12 +15,59 @@ var app = new Vue({
             {text:"decimal", value: 10},
             {text:"hexadecimal", value: 16}
         ],
-        number: 1100,
-        baseFrom: 2,
-        baseTo: 16, 
-        result: "C",
+        number: null,
+        baseFrom: 0,
+        baseTo: 0, 
+        result: null,
     },
     methods: {
+        // main program
+        convert: function() {
+            // two base must be selected
+            if (this.baseTo == 0 || this.baseFrom == 0) {
+                return;
+            }
+            let operation = null;
+            let number = this.number;
+            // binary <-> octal
+            if (this.baseFrom  == 2 && this.baseTo == 8)
+                operation = this.binaryToOctal;
+            else if (this.baseFrom  == 8 && this.baseTo == 2)
+                operation = this.octalToBinary;
+            // binary <-> decimal
+            else if (this.baseFrom  == 2 && this.baseTo == 10)
+                operation = this.binaryToDecimal;
+            else if (this.baseFrom  == 10 && this.baseTo == 2)
+                operation = this.decimalToBinary;
+            // binary <-> hex 
+            else if (this.baseFrom  == 2 && this.baseTo == 16)
+                operation = this.binaryToHex;
+            else if (this.baseFrom  == 16 && this.baseTo == 2)
+                operation = this.hexToBinary;
+            // octal <-> decimal 
+            else if (this.baseFrom  == 8 && this.baseTo == 10)
+                operation = this.octalToDecimal;
+            else if (this.baseFrom  == 10 && this.baseTo == 8)
+                operation = this.decimalToOctal;
+            // octal <-> hex 
+            else if (this.baseFrom  == 8 && this.baseTo == 16)
+                operation = this.octalToHex;
+            else if (this.baseFrom  == 16 && this.baseTo == 8)
+                operation = this.hexToOctal;
+            // decimal <-> hex 
+            else if (this.baseFrom  == 10  && this.baseTo == 16)
+                operation = this.decimalToHex;
+            else if (this.baseFrom  == 16 && this.baseTo == 10)
+                operation = this.hexToDecimal;
+            // perform operation
+            let output = operation(number)
+            // put it on UI
+            this.display(output);
+        },
+        // helper methods
+        display: function(output) {
+            this.result = output;
+        },
         binaryMap: function(binary) {
             if (binary == '0000')
                 return '0'
@@ -55,6 +102,41 @@ var app = new Vue({
             else if (binary == '1111') 
                 return 'F'
         },
+        // convert hex digit to binary
+        hexMap: function(hex) {
+            if (hex == '0')
+                return '0'
+            else if (hex == '1')
+                return '1'
+            else if (hex == '2' )
+                return  ' 10'
+            else if (hex == '3')
+                return '11'
+            else if (hex == '4') 
+                return '100'
+            else if (hex == '5')
+                return '101'
+            else if (hex == '6')
+                return '110'
+            else if (hex == '7')
+                return '111'
+            else if (hex == '8') 
+                return '1000'
+            else if (hex == '9') 
+                return '1001'
+            else if (hex == 'A')
+                return '1010'
+            else if (hex == 'B')
+                return '1011'
+            else if (hex == 'C') 
+                return '1100'
+            else if (hex == 'D') 
+                return '1101'
+            else if (hex == 'E')
+                return '1110'
+            else if (hex == 'F') 
+                return '1111'
+        },
         // separete givne string to length of given chunks
         separateAs: function(str, len) {
             let chunks = []
@@ -74,10 +156,6 @@ var app = new Vue({
             else if (digits.length == 3) 
                 digits = "0" + digits 
             return digits;
-        },
-        hello: function() {
-            let output = this.binaryToHex("1111")
-            console.log(output)
         },
         decimalToBinary: function(decimal) {
             let result = "";
@@ -141,10 +219,45 @@ var app = new Vue({
             }
             return result;
         },
-        /* create key-value pair of first 16
-         * binary and hex */
         hexToBinary: function(hex) {
-        }
+            let hexStr = hex.toString();
+            result = ''  
+            for (let i = 0; i < hexStr.length; i++) {
+                result += this.hexMap(hexStr.substring(i, i + 1))
+            }
+            return result;
+        },
+        // first convert octal to binary
+        // then covert binary to hex
+        octalToHex: function(octal) {
+            let binary = this.octalToBinary(octal);
+            console.log(binary)
+            return this.binaryToHex(binary);
+        },
+        // covert hex to binary 
+        // convert binary to octal 
+        hexToOctal: function(hex) {
+            let binary = this.hexToBinary(hex);
+            return this.binaryToOctal(binary);
+        },
+        decimalToOctal: function(decimal) {
+            let binary = this.decimalToBinary(decimal);
+            return this.binaryToOctal(binary);
+        },
+        octalToDecimal: function(octal) {
+            let binary = this.octalToBinary(octal);
+            return this.binaryToDecimal(binary);
+        },
+        decimalToHex: function(decimal) {
+            let binary = this.decimalToBinary(decimal);
+            return this.binaryToHex(binary);
+        },
+        hexToDecimal: function(hex) {
+            let binary = this.hexToBinary(hex);
+            return this.binaryToDecimal(binary);
+        },
+
     }
+
 })
 

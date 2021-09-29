@@ -13,7 +13,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" style="width: 150px;">Enter number</span>
               </div>
-              <input v-model="number" type="text" class="form-control" style="width: 150px;" placeholder="1100" aria-label="Username" aria-describedby="basic-addon1">
+              <input v-model="number" type="text" class="form-control" style="width: 150px;" placeholder="enter number" aria-label="Username" aria-describedby="basic-addon1">
             </div>
 
             <div class="input-group mb-3">
@@ -33,7 +33,7 @@
               </select>
             </div>
             <div id="output">
-                <button v-on:click="hello" type="button" style="width: 150px;" class="btn btn-success">convert</button>
+                <button v-on:click="convert" type="button" style="width: 150px;" class="btn btn-success">convert</button>
                 <span class="ms-2 text-center" id="result">
                     ({{ number}}) <sub>{{ baseFrom}}</sub> = ({{ result }}) <sub>{{ baseTo }}</sub>  
                 </span>
