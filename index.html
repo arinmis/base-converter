@@ -7,37 +7,50 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
         <title>Base Converter</title>
     </head>
-    <body class="vh-100 bg-white d-flex justify-content-center align-items-center">
-        <div id="converter">
-            <div class="input-group mb-3" >
-              <div class="input-group-prepend">
-                <span class="input-group-text" style="width: 150px;">Enter number</span>
-              </div>
-              <input v-model="number" type="text" class="form-control" style="width: 150px;" placeholder="enter number" aria-label="Username" aria-describedby="basic-addon1">
+    <body class="vh-100 bg-white bg-gradient d-flex justify-content-center align-items-center">
+        <div id="converter" class='shadow-lg p-4 rounded'>
+            <!-- output -->
+            <div class="mb-2 pb-2 overflow-auto h6 text-center border-bottom border-info border-2" style="width: 300px;" id="output">
+               <span>
+                   ({{ number}}) <sub>{{ baseFrom}}</sub> 
+               </span>&nbsp;=&nbsp;<span>
+               </span>
+               <span>
+                   ({{ result }}) <sub>{{ baseTo }}</sub>  
+               </span>
+            </div>
+            <!-- input -->
+            <div id="input">
+                <div class="input-group mb-3" >
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" style="width: 150px;">Enter number</span>
+                  </div>
+                  <input v-model="number" type="text" class="form-control" style="max-width: 150px;" placeholder="enter number" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text"  style="width: 150px;" for="inputGroupSelect01">From</label>
+                  </div>
+                  <select v-model="baseFrom" class="custom-select" style="width: 150px;">
+                      <option v-for="option in baseOptions" v-bind:value="option.value">{{ option.text }}</option>
+                  </select>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text"  style="width: 150px;" for="inputGroupSelect01">To</label>
+                  </div>
+                  <select v-model="baseTo" class="custom-select" style="width: 150px;">
+                      <option v-for="option in targetBaseOptions" v-bind:value="option.value">{{ option.text }}</option>
+                  </select>
+                </div>
             </div>
 
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <label class="input-group-text"  style="width: 150px;" for="inputGroupSelect01">From</label>
-              </div>
-              <select v-model="baseFrom" class="custom-select" style="width: 150px;">
-                  <option v-for="option in baseOptions" v-bind:value="option.value">{{ option.text }}</option>
-              </select>
-            </div>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <label class="input-group-text"  style="width: 150px;" for="inputGroupSelect01">To</label>
-              </div>
-              <select v-model="baseTo" class="custom-select" style="width: 150px;">
-                  <option v-for="option in targetBaseOptions" v-bind:value="option.value">{{ option.text }}</option>
-              </select>
-            </div>
-            <div id="output">
+            <!-- button -->
+            <div class='d-flex justify-content-center'>
                 <button v-on:click="convert" type="button" style="width: 150px;" class="btn btn-success">convert</button>
-                <span class="ms-2 text-center" id="result">
-                    ({{ number}}) <sub>{{ baseFrom}}</sub> = ({{ result }}) <sub>{{ baseTo }}</sub>  
-                </span>
             </div>
+            
         </div>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
         <script src="app.js"></script>

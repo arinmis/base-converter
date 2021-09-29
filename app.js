@@ -26,6 +26,10 @@ var app = new Vue({
             // two base must be selected
             if (this.baseTo == 0 || this.baseFrom == 0) {
                 return;
+            } 
+            else if (this.baseFrom == this.baseTo) {
+                this.display(this.number);
+                return;
             }
             let operation = null;
             let number = this.number;
@@ -197,14 +201,18 @@ var app = new Vue({
             }
             return result;
         },
+        // convert octal to decimal
+        // convert decimal to binary
         octalToBinary: function(octal) {
             let octalStr = octal.toString();
-            result = ''  
-            for (let i = 0; i < octalStr.length; i++) {
-                result += this.decimalToBinary(
-                    parseInt(octalStr.substring(i, i + 1)))
+            let result = 0;
+            let r = 0;
+            for (let i = octalStr.length - 1; i >= 0; i--) {
+                let digit = parseInt(octalStr.substring(i, i + 1))
+                result += (digit * Math.pow(8, r));
+                r++;
             }
-            return result;
+            return this.decimalToBinary(result);
         },
         binaryToHex: function(binary) {
             let binStr = binary.toString();
