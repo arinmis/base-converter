@@ -205,7 +205,7 @@ var app = new Vue({    el: '#converter',
             return this.isConsistOf(str, decimalDigits);
         },
         isHex: function(str) {
-            let hexDigits= "01234567ABCDF";
+            let hexDigits= "0123456789ABCDF";
             return this.isConsistOf(str, hexDigits);
         },
         decimalToBinary: function(decimal) {
