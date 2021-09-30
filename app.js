@@ -1,5 +1,4 @@
-var app = new Vue({
-    el: '#converter',
+var app = new Vue({    el: '#converter',
     data: {
         baseOptions: [
             {text:"Select base...", value: 0},
@@ -19,7 +18,9 @@ var app = new Vue({
         baseFrom: 0,
         baseTo: 0, 
         result: null,
-        isPressed: false,
+        isCalculated: false,
+        isErrorOccured: false,
+        errorMessage: null,
     },
     methods: {
         // main program
@@ -28,12 +29,14 @@ var app = new Vue({
             if (this.baseTo == 0 || this.baseFrom == 0) {
                 return;
             } 
+            // don't display anyting when base same
             else if (this.baseFrom == this.baseTo) {
-                this.display(this.number);
+                // this.display(this.number);
                 return;
             }
             let operation = null;
-            let number = this.number;
+            // make input number case sensitive
+            let number = this.number.toString().toUpperCase();
             // binary <-> octal
             if (this.baseFrom  == 2 && this.baseTo == 8)
                 operation = this.binaryToOctal;
@@ -64,15 +67,29 @@ var app = new Vue({
                 operation = this.decimalToHex;
             else if (this.baseFrom  == 16 && this.baseTo == 10)
                 operation = this.hexToDecimal;
+            // reset error status when button is pressed 
+            this.isErrorOccured = false;
+            this.isCalculated = false;
             // perform operation
-            let output = operation(number)
-            // put it on UI
-            this.display(output);
+            let output = null; 
+            try {
+                output = operation(number)
+            }
+            catch (error) {
+                this.displayError(error.toString())
+            }
+            // put it on UI, if input valid
+            if (!this.isErrorOccured)
+                this.display(output);
         },
         // helper methods
         display: function(output) {
             this.result = output;
-            this.isPressed = true; // render div
+            this.isCalculated = true; // render div
+        },
+        displayError: function(message) {
+            this.errorMessage = message;
+            this.isErrorOccured = true;
         },
         binaryMap: function(binary) {
             if (binary == '0000')
@@ -163,7 +180,38 @@ var app = new Vue({
                 digits = "0" + digits 
             return digits;
         },
+        // determine wheter given target consist of given charset
+        isConsistOf(targetStr, validChars) {
+            // check case sensitive  
+            targetStr = targetStr.toString().toUpperCase();
+            validChars = validChars.toUpperCase();
+            for (let i = 0; i < targetStr.length; i++) {
+                if (!validChars.includes(targetStr.substring(i, i + 1)))
+                    return false;
+            }
+            return true;
+        },
+        isBinary: function(str) {
+            let binaryDigits = "01";
+            return this.isConsistOf(str, binaryDigits);
+        },
+        isOctal: function(str) {
+            let octalDigits = "01234567";
+            return this.isConsistOf(str, octalDigits);
+        },
+        // check wheter given string is decimal or not
+        isDecimal: function(str) {
+            let decimalDigits = "0123456789";
+            return this.isConsistOf(str, decimalDigits);
+        },
+        isHex: function(str) {
+            let hexDigits= "01234567ABCDF";
+            return this.isConsistOf(str, hexDigits);
+        },
         decimalToBinary: function(decimal) {
+            if (!this.isDecimal(decimal)) {
+                throw decimal.toString() + " is not decimal number!";
+            }
             let result = "";
             // 10 / 2 = 5 -> 0
             //  5 / 2 = 2 -> 1
@@ -176,6 +224,9 @@ var app = new Vue({
             return Math.floor(decimal % 2).toString() + result;
         },
         binaryToDecimal: function(binary) {
+            if (!this.isBinary(binary)) {
+                throw binary.toString() + " is not binary number!";
+            }
             let binStr = binary.toString();
             let result = 0;
             let r = 0;
@@ -191,6 +242,9 @@ var app = new Vue({
          * 3. sum up each converted chunk
          */
         binaryToOctal: function(binary) {
+            if (!this.isBinary(binary)) {
+                throw binary.toString() + " is not binary number!";
+            }
             let binStr = binary.toString();
             let chunks = this.separateAs(binStr, 3);
             let result = "";
@@ -206,6 +260,9 @@ var app = new Vue({
         // convert octal to decimal
         // convert decimal to binary
         octalToBinary: function(octal) {
+            if (!this.isOctal(octal)) {
+                throw octal.toString() + " is not octal number!";
+            }
             let octalStr = octal.toString();
             let result = 0;
             let r = 0;
@@ -217,6 +274,9 @@ var app = new Vue({
             return this.decimalToBinary(result);
         },
         binaryToHex: function(binary) {
+            if (!this.isBinary(binary)) {
+                throw binary.toString() + " is not binary number!";
+            }
             let binStr = binary.toString();
             let chunks = this.separateAs(binStr, 4);
             let result = "";
@@ -230,6 +290,9 @@ var app = new Vue({
             return result;
         },
         hexToBinary: function(hex) {
+            if (!this.isHex(hex)) {
+                throw hex.toString() + " is not hex number!";
+            }
             let hexStr = hex.toString();
             result = ''  
             for (let i = 0; i < hexStr.length; i++) {
@@ -240,6 +303,9 @@ var app = new Vue({
         // first convert octal to binary
         // then covert binary to hex
         octalToHex: function(octal) {
+            if (!this.isOctal(octal)) {
+                throw octal.toString() + " is not octal number!";
+            }
             let binary = this.octalToBinary(octal);
             console.log(binary)
             return this.binaryToHex(binary);
@@ -247,22 +313,37 @@ var app = new Vue({
         // covert hex to binary 
         // convert binary to octal 
         hexToOctal: function(hex) {
+            if (!this.isHex(hex)) {
+                throw hex.toString() + " is not hex number!";
+            }
             let binary = this.hexToBinary(hex);
             return this.binaryToOctal(binary);
         },
         decimalToOctal: function(decimal) {
+            if (!this.isDecimal(decimal)) {
+                throw decimal.toString() + " is not decimal number!";
+            }
             let binary = this.decimalToBinary(decimal);
             return this.binaryToOctal(binary);
         },
         octalToDecimal: function(octal) {
+            if (!this.isOctal(octal)) {
+                throw octal.toString() + " is not octal number!";
+            }
             let binary = this.octalToBinary(octal);
             return this.binaryToDecimal(binary);
         },
         decimalToHex: function(decimal) {
+            if (!this.isDecimal(decimal)) {
+                throw decimal.toString() + " is not decimal number!";
+            }
             let binary = this.decimalToBinary(decimal);
             return this.binaryToHex(binary);
         },
         hexToDecimal: function(hex) {
+            if (!this.isHex(hex)) {
+                throw hex.toString() + " is not hex number!";
+            }
             let binary = this.hexToBinary(hex);
             return this.binaryToDecimal(binary);
         },
