@@ -205,7 +205,7 @@ var app = new Vue({    el: '#converter',
             return this.isConsistOf(str, decimalDigits);
         },
         isHex: function(str) {
-            let hexDigits= "0123456789ABCDF";
+            let hexDigits= "0123456789ABCDEF";
             return this.isConsistOf(str, hexDigits);
         },
         decimalToBinary: function(decimal) {
@@ -298,6 +298,7 @@ var app = new Vue({    el: '#converter',
             for (let i = 0; i < hexStr.length; i++) {
                 result += this.hexMap(hexStr.substring(i, i + 1))
             }
+            console.log(result);
             return result;
         },
         // first convert octal to binary
