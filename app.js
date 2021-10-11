@@ -297,7 +297,9 @@ var app = new Vue({    el: '#converter',
             result = ''  
             for (let i = 0; i < hexStr.length; i++) {
                 let chunk =  this.hexMap(hexStr.substring(i, i + 1));
-                result += this.makeFourDigit(chunk); 
+                if (i != 0) 
+                    chunk = this.makeFourDigit(chunk); 
+                result += chunk; 
             }
             return result;
         },
