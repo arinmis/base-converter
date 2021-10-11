@@ -132,7 +132,7 @@ var app = new Vue({    el: '#converter',
             else if (hex == '1')
                 return '1'
             else if (hex == '2' )
-                return  ' 10'
+                return  '10'
             else if (hex == '3')
                 return '11'
             else if (hex == '4') 
@@ -296,9 +296,9 @@ var app = new Vue({    el: '#converter',
             let hexStr = hex.toString();
             result = ''  
             for (let i = 0; i < hexStr.length; i++) {
-                result += this.hexMap(hexStr.substring(i, i + 1))
+                let chunk =  this.hexMap(hexStr.substring(i, i + 1));
+                result += this.makeFourDigit(chunk); 
             }
-            console.log(result);
             return result;
         },
         // first convert octal to binary
